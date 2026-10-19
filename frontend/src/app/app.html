@@ -1,0 +1,55 @@
+<div class="kiosk-shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Example Queue home"><span class="brand-mark">Q</span><span>EXAMPLE <b>QUEUE</b></span></a>
+    <span class="service-status"><i></i> ระบบรับบัตรคิวพร้อมใช้งาน</span>
+  </header>
+
+  <main class="kiosk-content">
+    @if (errorMessage(); as message) { <div class="error-banner" role="alert">{{ message }}</div> }
+
+    @if (view() === 'receive') {
+      <section class="welcome-copy"><p class="eyebrow">QUEUE MANAGEMENT <span>•</span> QUESTION 05</p><h1>ยินดีต้อนรับ</h1><p>รับบัตรคิวเพื่อเริ่มต้นใช้บริการ</p></section>
+      <section class="receive-layout" aria-label="รับบัตรคิว">
+        <article class="queue-card">
+          <div class="card-topline"><span class="card-kicker">NOW SERVING</span><span class="live-pill"><i></i> LIVE</span></div>
+          <div class="current-number">{{ currentNumber() }}</div>
+          <p class="current-caption">หมายเลขคิวล่าสุด</p>
+          <div class="next-preview"><span>คิวถัดไปของคุณ</span><strong>{{ nextNumber() }}</strong></div>
+          <button class="receive-button" type="button" (click)="receiveTicket()" [disabled]="busy() || loadingState()"><span>{{ busy() ? 'กำลังออกบัตร…' : 'รับบัตรคิว' }}</span><span aria-hidden="true">→</span></button>
+          <p class="queue-note">ระบบจะออกหมายเลขให้ตามลำดับโดยอัตโนมัติ</p>
+        </article>
+        <aside class="service-card">
+          <div class="service-illustration" aria-hidden="true">
+            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+            <div class="ticket-art"><span>YOUR TURN</span><strong>{{ nextNumber() }}</strong><i></i></div>
+            <span class="spark spark-one">✦</span><span class="spark spark-two">✧</span>
+          </div>
+          <div class="service-copy"><span class="small-label">SIMPLE · FAIR · IN ORDER</span><h2>คิวของคุณ<br />กำลังจะมาถึง</h2><p>กรุณาเก็บบัตรคิวไว้ และรอเรียกหมายเลขที่แสดงบนหน้าจอ</p></div>
+          <button class="clear-link" type="button" (click)="clearQueue()" [disabled]="busy()">ล้างคิว <span aria-hidden="true">↻</span></button>
+        </aside>
+      </section>
+    } @else if (view() === 'ticket') {
+      <section class="result-card ticket-result" aria-labelledby="ticket-heading">
+        <div class="result-icon ticket-icon" aria-hidden="true">✓</div>
+        <p class="eyebrow">YOUR TICKET <span>•</span> IT 05-2</p>
+        <h1 id="ticket-heading">หมายเลขคิวของคุณ</h1>
+        <div class="ticket-number">{{ ticket()?.number }}</div>
+        <p class="ticket-time">{{ ticketTime() }}</p>
+        <p class="result-hint">กรุณารอเรียกหมายเลขคิวของคุณ</p>
+        <button class="return-button" type="button" (click)="returnToReceive()">กลับหน้ารับบัตรคิว <span aria-hidden="true">→</span></button>
+      </section>
+    } @else {
+      <section class="result-card reset-result" aria-labelledby="reset-heading">
+        <div class="result-icon reset-icon" aria-hidden="true">↻</div>
+        <p class="eyebrow">QUEUE RESET <span>•</span> IT 05-3</p>
+        <h1 id="reset-heading">ล้างคิวเรียบร้อย</h1>
+        <p class="reset-label">หมายเลขคิวปัจจุบัน</p>
+        <div class="reset-number">00</div>
+        <p class="result-hint">ระบบพร้อมเริ่มรับบัตรคิวใหม่จาก A0</p>
+        <button class="return-button" type="button" (click)="returnToReceive()">กลับหน้ารับบัตรคิว <span aria-hidden="true">→</span></button>
+      </section>
+    }
+
+    <footer class="page-footer"><span>EXAMPLE QUEUE</span><i></i> ระบบจัดการคิวอัตโนมัติ</footer>
+  </main>
+</div>
